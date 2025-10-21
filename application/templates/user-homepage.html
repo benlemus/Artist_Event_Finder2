@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+
+<!-- title -->
+{% block title %}
+<title>Home</title>
+{% endblock %}
+
+<!-- content -->
+{% block content %}
+
+<div class="container-fluid py-4" style="background-color: white">
+  <!-- Account Details -->
+  <div class="row mb-4">
+    <div class="col">
+      <h1>Hello {{user.username}}</h1>
+      <div class="d-flex gap-3">
+        <a href="/user/details/{{user.username}}" class="btn btn-link"
+          >Account</a
+        >
+        {% if spot_login %}
+        <a href="/switch-accounts" class="btn btn-link">Switch Accounts</a>
+        {% else %}
+        <a href="/connect-spotify" class="btn btn-link">Connect Spotify</a>
+        {% endif %}
+        <a href="/logout" class="btn btn-link">Logout</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- top tracks behind -->
+  <div class="position-relative z-n1">
+    {% if top_tracks %}
+    <div class="text-center position-absolute" style="margin-top: 10%">
+      <div
+        class="row row-cols-3 align-items-bottom position-fixed"
+        style="width: 100vw"
+      >
+        {% for track in top_tracks %}
+        <div class="col">
+          <img src="{{track.img}}" alt="" style="max-height: 200px" />
+          <h5 class="fw-bold mt-3">{{track.name}}</h5>
+          <p>{{track.artist}}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  <!-- Top Artists -->
+  <div class="row mb-5" id="show-top-artists">
+    <div class="col">
+      <div class="row-title mb-4" style="background-color: white">
+        <h2 class="text-start">
+          Top Artists {% if not top_artists %}
+          <small style="color: red">(Connect Spotify to See)</small> {% endif %}
+        </h2>
+        <div class="border-bottom border-black"></div>
+      </div>
+      {% if top_artists %}
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-5 g-4 text-center">
+        {% for artist in top_artists %}
+        <div class="col">
+          <div>
+            <span class="align-bottom fw-bold fs-1 me-3"
+              >{{artist['id']}}.</span
+            >
+            <img
+              src="{{artist['img']}}"
+              alt=""
+              class="img-fluid"
+              style="max-height: 200px"
+            />
+          </div>
+          <p class="fs-4 mt-2" style="margin-left: 50px">{{artist['name']}}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-5 g-4 text-center">
+        {% for artist in generic_artists %}
+        <div class="col">
+          <div>
+            <span class="align-bottom fw-bold fs-1 me-3"
+              >{{artist['id']}}.</span
+            >
+            <img
+              src="{{artist['image']}}"
+              alt=""
+              class="img-fluid"
+              style="max-height: 200px; filter: blur(15px)"
+            />
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- FEATURED EVENTS -->
+  <div style="min-height: 45vh" id="show-featured-events">
+    <!-- hand picked -->
+    <div class="row-title mb-5">
+      <h2 class="text-start">Picked Just For You</h2>
+      <div class="border-bottom border-black"></div>
+    </div>
+    <div id="featured-events" style="min-height: 57vh"></div>
+  </div>
+
+  <div class="container row-title my-4">
+    <h2 class="text-center">Your Top Played Tracks</h2>
+  </div>
+</div>
+
+<!-- TOP TRACKS -->
+
+<div
+  class="container-fluid mt-5 z-0"
+  id="show-top-tracks-behind"
+  style="min-height: 40vh"
+></div>
+
+<div class="container-fluid py-4" style="background-color: white">
+  <!-- TOP ARTIST EVENTS -->
+
+  <div
+    class="container-fluid mt-5 pb-5"
+    style="background-color: white; min-height: 50vh"
+    id="show-top-tracks"
+  >
+    <div class="container row-title mb-5">
+      <h2 class="text-start">My Top Artist's Events ></h2>
+      <div class="border-bottom border-black"></div>
+    </div>
+
+    <div class="container row-container">
+      <div
+        id="topArtistCardCarousel"
+        class="carousel slide carousel-dark"
+        data-bs-ride="carousel"
+      >
+        <div class="carousel-inner" id="top-artist-list"></div>
+
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#topArtistCardCarousel"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#topArtistCardCarousel"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GENERIC EVENTS NEAR USER -->
+
+  <div class="container-fluid pt-5" style="background-color: white">
+    <div class="container row-title mb-5">
+      <h2 class="text-start">Events Near You</h2>
+      <div class="border-bottom border-black"></div>
+    </div>
+    <div class="container-fluid" style="min-height: 57vh">
+      <div class="row row-cols-3 mx-auto" style="max-width: 90vw">
+        {% for event in generic_events_geohash %}
+        <div class="col">
+          <div
+            class="card mb-3"
+            style="min-height: 300px; max-width: 700px; max-height: 300px"
+          >
+            <div class="row g-0">
+              <div
+                class="col-md-4 pt-1 ps-1"
+                style="min-height: 290px; max-height: 290px"
+              >
+                <img
+                  src="{{event.image}}"
+                  alt=""
+                  class="img-fluid rounded-start grid-card-img"
+                />
+              </div>
+
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h3 class="card-title">{{event.name}}</h3>
+                  <p class="card-text">{{event.location}}</p>
+                  <p class="card-text">
+                    {{ event.date.strftime('%B %d, %Y') if event.date else 'TBA'
+                    }}
+                  </p>
+                  <h5 class="card-title">{{event.artist}}</h5>
+
+                  <a href="{{event.url}}" class="btn btn-primary"
+                    >Get Tickets</a
+                  >
+                  {% if event.event_id not in wishlist %}
+                  <button
+                    class="btn btn-success ms-3 wishlistBtn"
+                    data-eventid="{{event.event_id}}"
+                  >
+                    Add to Wishlist
+                  </button>
+                  {% else %}
+                  <button
+                    class="btn btn-danger ms-3 wishlistBtn"
+                    data-eventid="{{event.event_id}}"
+                  >
+                    Remove from Wishlist</button
+                  >{% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- popular events -->
+  <div class="container-fluid pt-5" style="background-color: white">
+    <div class="container row-title mb-5">
+      <h2 class="text-start">Trending Events</h2>
+      <div class="border-bottom border-black"></div>
+    </div>
+    <div class="container row-container">
+      <div
+        id="popularCardCarousel"
+        class="carousel slide carousel-dark"
+        data-bs-ride="carousel"
+      >
+        <div class="carousel-inner">
+          {% for event_group in all_events %}
+          <div class="carousel-item {% if loop.first %} active {% endif %}">
+            <div class="card-group">
+              {% for event in event_group %}
+              <div class="card">
+                <img
+                  src="{{event.image}}"
+                  alt=""
+                  class="card-img-top"
+                  style="max-height: 230px"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">{{event.name}}</h5>
+                  <p class="card-text">{{event.location}}</p>
+                  <p class="card-text">
+                    {{ event.date.strftime('%B %d, %Y') if event.date else 'TBA'
+                    }}
+                  </p>
+                  <a href="" class="btn btn-primary">Get tickets</a>
+                  {% if event.evnet_id in wishlist %}
+                  <button
+                    class="btn btn-danger ms-3 wishlistBtn"
+                    data-eventid="{{event.event_id}}"
+                    href=""
+                  >
+                    Remove from Wishlist
+                  </button>
+                  {% else %}
+                  <button
+                    class="btn btn-success ms-3 wishlistBtn"
+                    data-eventid="{{event.event_id}}"
+                  >
+                    Add to Wishlist
+                  </button>
+                  {% endif %}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#popularCardCarousel"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#popularCardCarousel"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- whitespace -->
+  <div class="container-fluid" style="min-height: 15vh"></div>
+  {% endblock %}
+</div>
