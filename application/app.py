@@ -1,8 +1,6 @@
 import os
 from flask import Flask, redirect, render_template, request, url_for, session, g, flash
-from flask_session import Session
 from dotenv import load_dotenv
-import redis
 import pgeocode
 import pygeohash as pgh
 from sqlalchemy.exc import IntegrityError, PendingRollbackError
@@ -16,17 +14,17 @@ from spotify import SpotifyAPI
 load_dotenv()
 app = Flask(__name__)
 
-app.config['SESSION_TYPE'] = 'redis'
-app.config['SESSION_REDIS'] = redis.Redis(host='localhost', port=6379)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SUPABASE_URL')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
-Session(app)
 connect_db(app)
+
+with app.app_context():
+    db.create_all()
 
 CUR_U_ID = 'user id'
 
@@ -165,7 +163,7 @@ def user_details(username):
         return redirect(url_for('homepage'))
     
     user = User.query.filter_by(username=username).first()
-    spot_login = True if session['spotify_token'] else False
+    spot_login = True if session.get('spotify_token', None) else False
 
     return render_template('user-details.html', user=user, spot_login=spot_login)
 
@@ -181,7 +179,7 @@ def edit_user(username):
     u = User.query.filter_by(username=username).first()
     form = EditUserForm(obj=u)
 
-    spot_login = True if session['spotify_token'] else False
+    spot_login = True if session.get('spotify_token', None) else False
 
     if form.validate_on_submit():
         try:
@@ -222,7 +220,7 @@ def change_password(username):
     
     u = User.query.filter_by(username=username).first()
     form = ChangePasswordForm()
-    spot_login = True if session['spotify_token'] else False
+    spot_login = True if session.get('spotify_token', None) else False
 
     if form.validate_on_submit():
         auth = User.authenticate(u.username, form.password.data)
@@ -251,7 +249,7 @@ def change_pfp(username):
     
     u = User.query.filter_by(username=username).first()
     form = ChangePfpForm()
-    spot_login = True if session['spotify_token'] else False
+    spot_login = True if session.get('spotify_token', None) else False
 
     if form.validate_on_submit():
         profile_img = form.profile_img.data
@@ -344,7 +342,7 @@ def show_wishlist():
 
     wishlist_ids = [event.event_id for event in user.wishlist]
 
-    spot_login = True if session['spotify_token'] else False
+    spot_login = True if session.get('spotify_token', None) else False
     
     
     return render_template('user-wishlist.html', wishlist=wishlist_events, wishlist_ids=wishlist_ids, user=user, spot_login=spot_login)
@@ -454,10 +452,11 @@ def get_top_artists():
 
         all_events = Event.get_condensed_events(artists)
 
-        for event in ordered_events:
-            new_user_event = UserEvent(user_id=user.id, event_id=event.event_id)
-            db.session.add(new_user_event)
-            db.session.commit()
+        for event_group in all_events:
+            for event in event_group:
+                new_user_event = UserEvent(user_id=user.id, event_id=event.event_id)
+                db.session.add(new_user_event)
+                db.session.commit()
     elif user_events:
         all_events = Event.get_condensed_events(artists)
 
