@@ -17,6 +17,8 @@ class NewUserForm(FlaskForm):
 
     @staticmethod
     def get_country_choices():
+        ''' gets all country choices for user signup form'''
+
         country_choices = []
 
         data = load_country_codes()
@@ -28,6 +30,8 @@ class NewUserForm(FlaskForm):
     
 
     def validate_zipcode(self, zipcode):
+        ''' validates zipcode by checking if zipcode is in selected country'''
+
         if not check_zipcode(zipcode.data, self.country.data):
             raise ValidationError('Invalid zipcode for the selected country.')
 
@@ -43,6 +47,7 @@ class NewUserForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     ''' form for user to login '''
+
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
 
@@ -57,6 +62,8 @@ class EditUserForm(FlaskForm):
 
     @staticmethod
     def get_country_choices():
+        ''' gets all country choices for user signup form'''
+
         country_choices = []
 
         data = load_country_codes()
@@ -68,6 +75,8 @@ class EditUserForm(FlaskForm):
     
 
     def validate_zipcode(self, zipcode):
+        ''' validates zipcode by checking if zipcode is in selected country'''
+
         if not check_zipcode(zipcode.data, self.country.data):
             raise ValidationError('Invalid zipcode for the selected country.')
         
@@ -80,6 +89,8 @@ class EditUserForm(FlaskForm):
 
 
 class ChangePasswordForm(FlaskForm):
+    ''' form to change a users password '''
+
     password = PasswordField('Old Password', validators=[DataRequired(), Length(min=6)])
 
     new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=6)])
@@ -87,10 +98,14 @@ class ChangePasswordForm(FlaskForm):
 
 
 class ChangePfpForm(FlaskForm):
+    ''' form to change a users profile image '''
+
     profile_img = StringField('profile_img')
 
 
 def check_zipcode(zipcode, country):
+    ''' checks zipcode is in selected country'''
+
     load_cc = load_country_codes()
     cc = load_cc.get(country) 
     nomi = pgeocode.Nominatim(cc)
@@ -102,6 +117,8 @@ def check_zipcode(zipcode, country):
 
 
 def load_country_codes(file_path='data/countries.json'):
+    ''' loads file that stores all country codes with each country '''
+    
     with open(file_path, 'r') as file:
         return json.load(file)
 

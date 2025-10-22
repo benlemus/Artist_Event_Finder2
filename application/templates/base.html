@@ -21,6 +21,55 @@
     {% endblock %}
   </head>
   <body>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Find My Artist</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
+            </li>
+            {% if user %}
+            <li class="nav-item">
+              <a class="nav-link" href="/user/details/{{user.username}}"
+                >My Account</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/user/wishlist">My Wishlist</a>
+            </li>
+            {% endif %} {% if not user %}
+            <li class="nav-item">
+              <a class="nav-link" href="/signup">Sign Up</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            {% endif %} {% if user and not spot_login %}
+            <li class="nav-item">
+              <a class="nav-link btn btn-success" href="/connect-spotify"
+                >Connect Spotify</a
+              >
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
     <!-- flask flash messages -->
     <div class="container">
       {% for category, message in get_flashed_messages(with_categories=True) %}

@@ -1,19 +1,23 @@
 import requests
-from datetime import datetime
-from models import CreateEvent, Artist, Event, UserEvent
+from models import CreateEvent, Event
 from app import db
 
 
 class TicketmasterAPI:
+    ''' sets up ticketmaster class to handle all ticketmaster functions '''
+
     def __init__(self, api_key, base_url="https://app.ticketmaster.com/discovery/v2"):
         self.api_key = api_key
         self.base_url = base_url
     
 
     def set_up_artists(self, artists):
+        ''' takes in raw artist data and parses info to create a simplier artist object'''
+
         if artists:
             artists_setup = []
             for artist in artists:
+                    # gets all data from each artist
                 name = artist.get('name', None)
                 spot_id = artist.get('spotify_id', None)
                 spot_url = artist.get('spotify_url', None)
@@ -38,6 +42,8 @@ class TicketmasterAPI:
 
 
     def get_attraction_id(self, name, spotify_url):
+        ''' takes in name and spotify url and checks if the artist by name has the same spotify url in the ticketmaster data'''
+
         if name:
             res = requests.get(
                 f'{self.base_url}/attractions.json',
@@ -52,26 +58,19 @@ class TicketmasterAPI:
             artists = data.get('_embedded', {}).get('attractions', [{}])
 
             for artist in artists:
+                    # gets spotify link from ticketmaster data
                 tm_spot_url = artist.get('externalLinks', {}).get('spotify', [{}])[0].get('url', None)
-
+                    # checks if passed in spotify url = ticketmaster  spotify url
                 if spotify_url == tm_spot_url:
+                        # returns artist attraction id if matches
                     return artist.get('id', None)
         return None
 
 
-                # else:
-                #     params = {
-                #         'attractionId': artist_attraction_ids,
-                #         'geoPoint': geohash,
-                #         'radius': '500',
-                #         'unit': 'miles',
-                #         'page': page,
-                #         'sort': 'distance,date,asc',
-                #         'apikey': self.api_key
-                #     }
-
-
     def add_events_to_db(self, artists, geohash=None):
+        ''' adds event to data base after getting events based on location and artist then checking if it already exists'''
+
+            # for each artist, requests the artists events
         for artist in artists:
             events_added = 0
             seen_events= []
@@ -80,6 +79,7 @@ class TicketmasterAPI:
                 break
 
             if geohash:
+                    # gets events near users zipcode
                 params = {
                     'attractionId': artist.attraction_id,
                     'geoPoint': geohash,
@@ -101,6 +101,7 @@ class TicketmasterAPI:
                 if not event_data:
                     continue
             
+                    # itterates over all events from specific artist
                 for event in event_data:
                     if events_added >= 2:
                         break
@@ -113,6 +114,7 @@ class TicketmasterAPI:
                     created_event = CreateEvent(event)
                     new_event = created_event.create_event()
 
+                        # checks if event already exists
                     existing_event = Event.query.filter_by(event_id=new_event['event_id']).first()
 
                     if not existing_event:
@@ -126,6 +128,8 @@ class TicketmasterAPI:
 
 
     def get_generic_events(self, geohash=None):
+        ''' gets generic events based on only users location '''
+
         events = []
         seen_artists = []
         num_events = 20
@@ -156,12 +160,14 @@ class TicketmasterAPI:
             
             event_data = res.json().get('_embedded', {}).get('events', [{}])
 
+                # itterates over all events
             for event in event_data:
                 if len(events) >= num_events:
                     break
 
                 artist = event.get('_embedded', {}).get('attractions', [{}])[0].get('name', event.get('name'))
 
+                    # cant append duplicate artists
                 if artist in seen_artists:
                     continue
                 
@@ -172,7 +178,10 @@ class TicketmasterAPI:
 
         return events if events else None
     
+
     def get_event(self, event_id):
+        ''' rquests single specific event data based on event id'''
+        
         if event_id:
             res = requests.get(
                 f'{self.base_url}/events',

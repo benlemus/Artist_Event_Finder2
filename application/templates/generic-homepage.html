@@ -21,6 +21,98 @@
 </div>
 
 <div class="container-fluid">
+  <!-- Top Artists -->
+
+  <div class="row mb-5" id="show-top-artists">
+    <div class="col">
+      <div class="row-title mb-4" style="background-color: white">
+        <h2 class="text-start">See Your Top Artists On Spotify!</h2>
+        <div class="border-bottom border-black"></div>
+      </div>
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-5 g-4 text-center">
+        {% for artist in generic_artists %}
+        <div class="col">
+          <div>
+            <span class="align-bottom fw-bold fs-1 me-3"
+              >{{artist['id']}}.</span
+            >
+            <img
+              src="{{artist['image']}}"
+              alt=""
+              class="img-fluid"
+              style="max-height: 200px; filter: blur(15px)"
+            />
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Artist Events -->
+
+  <div class="container-fluid pt-5" style="background-color: white">
+    <div class="container row-title mb-5">
+      <h2 class="text-start">See Your Top Artist Events Near You!</h2>
+      <div class="border-bottom border-black"></div>
+    </div>
+    <div class="container-fluid" style="min-height: 57vh">
+      <div class="row row-cols-3 mx-auto" style="max-width: 90vw">
+        {% for event in all_events[0] %}
+        <div class="col" style="filter: blur(15px)">
+          <div
+            class="card mb-3"
+            style="min-height: 300px; max-width: 700px; max-height: 300px"
+          >
+            <div class="row g-0">
+              <div
+                class="col-md-4 pt-1 ps-1"
+                style="min-height: 290px; max-height: 290px"
+              >
+                <img
+                  src="{{event.image}}"
+                  alt=""
+                  class="img-fluid rounded-start grid-card-img"
+                />
+              </div>
+
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h3 class="card-title">{{event.name}}</h3>
+                  <p class="card-text">{{event.location}}</p>
+                  <p class="card-text">
+                    {{ event.date.strftime('%B %d, %Y') if event.date else 'TBA'
+                    }}
+                  </p>
+                  <h5 class="card-title">{{event.artist}}</h5>
+
+                  <a href="{{event.url}}" class="btn btn-primary"
+                    >Get Tickets</a
+                  >
+                  {% if event.event_id not in wishlist %}
+                  <button
+                    class="btn btn-success ms-3 wishlistBtn"
+                    data-eventid="{{event.event_id}}"
+                  >
+                    Add to Wishlist
+                  </button>
+                  {% else %}
+                  <button
+                    class="btn btn-danger ms-3 wishlistBtn"
+                    data-eventid="{{event.event_id}}"
+                  >
+                    Remove from Wishlist</button
+                  >{% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
   <!-- Popular events -->
   <div class="container row-title mb-4">
     <h2 class="text-start">Trending Events</h2>
@@ -51,7 +143,7 @@
                   {{ event.date.strftime('%B %d, %Y') if event.date else 'TBA'
                   }}
                 </p>
-                <a href="" class="btn btn-primary">Get tickets</a>
+                <a href="{{event.url}}" class="btn btn-primary">Get tickets</a>
               </div>
             </div>
             {% endfor %}

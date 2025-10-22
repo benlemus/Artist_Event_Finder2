@@ -9,24 +9,6 @@
 {% block content %}
 
 <div class="container-fluid py-4" style="background-color: white">
-  <!-- Account Details -->
-  <div class="row mb-4">
-    <div class="col">
-      <h1>Hello {{user.username}}</h1>
-      <div class="d-flex gap-3">
-        <a href="/user/details/{{user.username}}" class="btn btn-link"
-          >Account</a
-        >
-        {% if spot_login %}
-        <a href="/switch-accounts" class="btn btn-link">Switch Accounts</a>
-        {% else %}
-        <a href="/connect-spotify" class="btn btn-link">Connect Spotify</a>
-        {% endif %}
-        <a href="/logout" class="btn btn-link">Logout</a>
-      </div>
-    </div>
-  </div>
-
   <!-- top tracks behind -->
   <div class="position-relative z-n1">
     {% if top_tracks %}
@@ -57,7 +39,9 @@
         <div class="border-bottom border-black"></div>
       </div>
       {% if top_artists %}
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-5 g-4 text-center">
+      <div
+        class="row row-cols-1 row-cols-sm-2 row-cols-lg-5 g-4 text-center mt-2"
+      >
         {% for artist in top_artists %}
         <div class="col">
           <div>
@@ -76,7 +60,9 @@
         {% endfor %}
       </div>
       {% else %}
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-5 g-4 text-center">
+      <div
+        class="row row-cols-1 row-cols-sm-2 row-cols-lg-5 g-4 text-center mt-2"
+      >
         {% for artist in generic_artists %}
         <div class="col">
           <div>
@@ -96,6 +82,8 @@
       {% endif %}
     </div>
   </div>
+
+  {% if top_artists and top_tracks %}
 
   <!-- FEATURED EVENTS -->
   <div style="min-height: 45vh" id="show-featured-events">
@@ -117,7 +105,7 @@
 <div
   class="container-fluid mt-5 z-0"
   id="show-top-tracks-behind"
-  style="min-height: 40vh"
+  style="min-height: 36vh"
 ></div>
 
 <div class="container-fluid py-4" style="background-color: white">
@@ -129,7 +117,7 @@
     id="show-top-tracks"
   >
     <div class="container row-title mb-5">
-      <h2 class="text-start">My Top Artist's Events ></h2>
+      <h2 class="text-start">My Top Artist's Events</h2>
       <div class="border-bottom border-black"></div>
     </div>
 
@@ -160,7 +148,7 @@
       </div>
     </div>
   </div>
-
+  {% endif %}
   <!-- GENERIC EVENTS NEAR USER -->
 
   <div class="container-fluid pt-5" style="background-color: white">
