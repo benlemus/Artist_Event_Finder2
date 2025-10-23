@@ -208,7 +208,7 @@ class CreateEvent():
     def create_event(self):
         ''' creates event with parsed data '''
 
-        artist = self.event.get('_embedded', {}).get('attractions', [{}])[0].get('name', None)
+        artist = self.event.get('_embedded', {}).get('attractions', [{}])[0].get('name', self.event.get('name', 'could not get artist name'))
         name = self.event.get('name', 'could not get artist name')
         event_id = self.event.get('id', 'could not get event info')
         url = self.event.get('url', 'could not get event url')
