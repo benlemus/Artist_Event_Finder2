@@ -1,6 +1,8 @@
 # WHERE'S MY ARTIST
+
 ### Link To Website
 
+https://artist-event-finder2.onrender.com/
 
 ### Overview
 
@@ -14,6 +16,11 @@ A user can easily link to buy tickets, see events near them they might like, see
     - WTForms
     - Bcrypt
     - SQL
+
+## Deployment
+
+    - SupaBase
+    - Render
 
 ## Features
 
@@ -35,7 +42,7 @@ A user can easily link to buy tickets, see events near them they might like, see
     In the navbar, there are links to see your wishlist, go to your account or logout.
     Your wishlist that shows all your events you will one day go to!
     At any time you are allowed to change your profile details in the My Account section and under the edit details. You can also change your password here.
-    
+
 ## APIS Used
 
     - Ticketmaster API
