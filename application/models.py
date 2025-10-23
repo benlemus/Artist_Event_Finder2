@@ -119,7 +119,7 @@ class Artist(db.Model):
     __tablename__ = 'artists'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text, nullable=False)
+    name = db.Column(db.Text, nullable=True)
     spotify_id = db.Column(db.Text, nullable=False, unique=True)
     spotify_url = db.Column(db.Text, nullable=False, unique=True)
     image = db.Column(db.Text, nullable=True)
@@ -142,7 +142,7 @@ class Event(db.Model):
 
     event_id = db.Column(db.Text, nullable=False, unique=True, primary_key=True)
     name = db.Column(db.Text, nullable=False)
-    artist = db.Column(db.Text, nullable=False)
+    artist = db.Column(db.Text, nullable=True)
     url = db.Column(db.Text, nullable=False)
     image = db.Column(db.Text, nullable=False)
     date = db.Column(db.Date, nullable=True)
