@@ -50,4 +50,5 @@ A user can easily link to buy tickets, see events near them they might like, see
 
 ## Testing
 
-    There are two testing files. One to test all of the models connecting directly to the database and one to test all of the flask routes. To use them, simply clone the repo, make sure you have all the requirements and run 'python -m unittest [full_file_name]'.
+    There are two testing files. One to test all of the models connecting directly to the database and one to test all of the flask routes. To use them, simply clone the repo, make sure you have all the requirements and run:
+    ```python -m unittest [full_file_name]```

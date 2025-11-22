@@ -8,7 +8,10 @@
 <!-- content -->
 {% block content %}
 
-<div class="container-fluid py-4" style="background-color: white">
+<div
+  class="container-fluid py-4"
+  style="background-color: rgb(53, 174, 249); margin-top: 50px"
+>
   <!-- top tracks behind -->
   <div class="position-relative z-n1">
     {% if top_tracks %}
@@ -31,7 +34,7 @@
   <!-- Top Artists -->
   <div class="row mb-5" id="show-top-artists">
     <div class="col">
-      <div class="row-title mb-4" style="background-color: white">
+      <div class="row-title mb-4">
         <h2 class="text-start">
           Top Artists {% if not top_artists %}
           <small style="color: red">(Connect Spotify to See)</small> {% endif %}
@@ -108,12 +111,12 @@
   style="min-height: 36vh"
 ></div>
 
-<div class="container-fluid py-4" style="background-color: white">
+<div class="container-fluid py-4" style="background-color: rgb(53, 174, 249)">
   <!-- TOP ARTIST EVENTS -->
 
   <div
     class="container-fluid mt-5 pb-5"
-    style="background-color: white; min-height: 50vh"
+    style="min-height: 50vh"
     id="show-top-tracks"
   >
     <div class="container row-title mb-5">
@@ -151,7 +154,7 @@
   {% endif %}
   <!-- GENERIC EVENTS NEAR USER -->
 
-  <div class="container-fluid pt-5" style="background-color: white">
+  <div class="container-fluid pt-5" style="background-color: rgb(53, 174, 249)">
     <div class="container row-title mb-5">
       <h2 class="text-start">Events Near You</h2>
       <div class="border-bottom border-black"></div>
@@ -214,7 +217,7 @@
   </div>
 
   <!-- popular events -->
-  <div class="container-fluid pt-5" style="background-color: white">
+  <div class="container-fluid pt-5" style="background-color: rgb(53, 174, 249)">
     <div class="container row-title mb-5">
       <h2 class="text-start">Trending Events</h2>
       <div class="border-bottom border-black"></div>

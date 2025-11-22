@@ -57,3 +57,7 @@
   object-fit: cover;
   object-position: center;
 }
+
+body {
+  background-color: rgb(53, 174, 249);
+}
