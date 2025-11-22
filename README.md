@@ -18,6 +18,12 @@ A user can easily link to buy tickets, see events near them they might like, see
 ### Post Spotify Connection
 <img width="1899" height="906" alt="post-spotify-login" src="https://github.com/user-attachments/assets/8d0bbaa1-7cce-4950-9037-ae1e5292bc59" />
 
+### See Top Artist Events
+<img width="1896" height="673" alt="top-artist-events" src="https://github.com/user-attachments/assets/52c1f18b-449e-4e36-9536-313a359f6f09" />
+
+### See Top Played Tracks
+<img width="1885" height="542" alt="top-tracks" src="https://github.com/user-attachments/assets/fd70573b-86d6-4e09-bc37-d54dcc3d42d7" />
+
 ## Stack
 
     - Python
@@ -59,5 +65,4 @@ A user can easily link to buy tickets, see events near them they might like, see
 
 ## Testing
 
-    There are two testing files. One to test all of the models connecting directly to the database and one to test all of the flask routes. To use them, simply clone the repo, make sure you have all the requirements and run:
-```python -m unittest [full_file_name]```
+    There are two testing files. One to test all of the models connecting directly to the database and one to test all of the flask routes. To use them, simply clone the repo, make sure you have all the requirements and run: python -m unittest [full_file_name]
