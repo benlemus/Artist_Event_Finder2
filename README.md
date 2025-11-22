@@ -9,6 +9,15 @@ https://artist-event-finder2.onrender.com/
 This is a web application that connects to a users Spotify account to automatically search for any upcoming events pertaining to their most listened to artists.
 A user can easily link to buy tickets, see events near them they might like, see where their favorite artists are performing and see currently trending events.
 
+### Login Page
+<img width="1899" height="906" alt="landing-page" src="https://github.com/user-attachments/assets/0ba6b3f7-ffe0-4f0e-b107-f03ac005fe4b" />
+
+### Pre Spotify Connection
+<img width="1902" height="907" alt="pre-spotify-login" src="https://github.com/user-attachments/assets/77ce5054-2813-4a5b-9e1d-8f820d8e2966" />
+
+### Post Spotify Connection
+<img width="1899" height="906" alt="post-spotify-login" src="https://github.com/user-attachments/assets/8d0bbaa1-7cce-4950-9037-ae1e5292bc59" />
+
 ## Stack
 
     - Python
@@ -51,4 +60,4 @@ A user can easily link to buy tickets, see events near them they might like, see
 ## Testing
 
     There are two testing files. One to test all of the models connecting directly to the database and one to test all of the flask routes. To use them, simply clone the repo, make sure you have all the requirements and run:
-    ```python -m unittest [full_file_name]```
+```python -m unittest [full_file_name]```
